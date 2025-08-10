@@ -1,0 +1,201 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===========================
+   THEME: Carbon Dark + Cobalt
+   =========================== */
+:root{
+  /* Fundal & suprafețe */
+  --bg-0: 222 15% 6%;   /* #0b0e12  main background */
+  --bg-1: 220 16% 8%;   /* #0e1217  section surface */
+  --bg-2: 220 14% 10%;  /* #12161c  deep surface */
+
+  /* Text */
+  --ink-0: 220 18% 96%; /* #eef1f6  primary text */
+  --ink-1: 220 12% 75%; /* #b4bcc8  secondary */
+  --ink-2: 220 10% 60%; /* #8e98a6  muted */
+
+  /* Linie/border pe dark */
+  --line-0: 220 10% 24%; /* #303744 */
+  --line-1: 220 10% 18%; /* #232a35 */
+
+  /* Accent cobalt foarte discret (hover/focus/butoane primare) */
+  --accent: 228 90% 56%;   /* #2d5cff */
+  --accent-ink: 0 0% 100%;
+
+  /* Radius consistent */
+  --r-s: 12px;
+  --r-m: 16px;
+  --r-l: 20px;
+}
+
+html, body { height: 100%; color-scheme: dark; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+body{
+  color: hsl(var(--ink-0));
+  background:
+    radial-gradient(1200px 800px at 85% -10%, #0f141b 0%, transparent 55%),
+    radial-gradient(900px 600px at -10% 0%, #10161e 0%, transparent 55%),
+    linear-gradient(180deg, #0b0f14 0%, #0d1118 45%, #0b0f14 100%);
+  background-color: #0b0f14;
+  font-feature-settings: "kern","liga","ss01";
+}
+
+/* Containers & sections */
+.container{ @apply max-w-6xl mx-auto px-4; }
+.section{ @apply py-12 md:py-16; }
+.sep{ height:1px; border:0; background: linear-gradient(to right, transparent, hsl(var(--line-0)), transparent); margin: 32px 0; }
+
+/* Selection */
+::selection{ background: hsl(var(--accent) / .28); color: #fff; }
+
+/* Headings (clar, fără „paint” look) */
+h1,h2,h3{ letter-spacing: -0.01em; }
+h1{ font-weight: 800; line-height: 1.05; }
+h2{ font-weight: 700; line-height: 1.12; }
+
+/* ===========================
+   NAVBAR: sticky glass premium
+   =========================== */
+.navbar{
+  position: sticky; top: 0; z-index: 50; width: 100%;
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.nav-inner{ @apply max-w-6xl mx-auto px-4 h-16 flex items-center justify-between; }
+.wordmark{ font-weight: 700; font-size: 17px; color: #fff; letter-spacing: .02em; }
+.nav-links{ @apply hidden md:flex items-center gap-6; }
+.nav-link{
+  color: rgba(255,255,255,.92); font-weight: 600;
+  transition: opacity .14s ease, transform .14s ease, color .14s ease;
+}
+.nav-link:hover{ opacity:.9; transform: translateY(-1px); color:#fff; }
+
+/* ===========================
+   BUTTONS
+   =========================== */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  height:44px; padding:0 1rem; border-radius: var(--r-s); font-weight:700;
+  border:1px solid hsl(var(--line-0));
+  transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease, color .12s ease, border-color .12s ease;
+}
+.btn:disabled{ opacity:.6; cursor:not-allowed; }
+
+.btn-primary{
+  background:hsl(var(--accent));
+  color:hsl(var(--accent-ink));
+  border-color:hsl(var(--accent));
+  box-shadow: 0 10px 26px rgba(0,0,0,.45), 0 1px 0 rgba(255,255,255,.08) inset;
+}
+.btn-primary:hover{ transform:translateY(-1px); box-shadow: 0 16px 36px rgba(0,0,0,.55); }
+
+.btn-ghost{
+  background: linear-gradient(to bottom right, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  color: #e7ebf2;
+  border-color: hsl(var(--line-1));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
+.btn-ghost:hover{ transform:translateY(-1px); box-shadow: 0 8px 18px rgba(0,0,0,.42); }
+
+/* ===========================
+   LIQUID GLASS PANELS
+   =========================== */
+.glass{
+  position:relative; border-radius: var(--r-m);
+  background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.07));
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow:
+    0 14px 34px rgba(0,0,0,.50),
+    0 2px 0 rgba(255,255,255,.06) inset;
+}
+.glass::before{
+  content:""; position:absolute; inset:0; pointer-events:none; border-radius:inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 38%);
+  mix-blend-mode: screen; opacity:.65;
+}
+
+/* Strip pentru lista de clienți (contrast corect pe dark) */
+.strip-surface{
+  border-radius: var(--r-l);
+  background: linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+  border:1px solid rgba(255,255,255,.16);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  padding: 10px 12px;
+}
+.scroll-fade{
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+}
+
+/* Chip client: clar definit, premium, cu shadow fin permanent */
+.chip-glass{
+  position:relative; border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.08));
+  border:1px solid rgba(255,255,255,.24);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.14),
+    0 10px 26px rgba(0,0,0,.45);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
+}
+.chip-glass:hover{
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.20),
+    0 16px 36px rgba(0,0,0,.55);
+}
+.chip-glass.is-selected{
+  border-color: rgba(255,255,255,.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    0 18px 40px rgba(0,0,0,.58);
+}
+
+/* Social pills — monocrom curate pe dark */
+.social-pill{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:38px; height:38px; border-radius:9999px;
+  background: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.10));
+  border: 1px solid rgba(255,255,255,.26);
+  color: #fff;
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 10px 22px rgba(0,0,0,.45);
+  transition: transform .14s ease, box-shadow .14s ease, background-color .14s ease;
+}
+.social-pill:hover{
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, rgba(255,255,255,.24), rgba(255,255,255,.14));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 14px 28px rgba(0,0,0,.55);
+}
+
+/* Inputs glass — lizibile, contur elegant, focus cobalt */
+.input-glass{
+  border-radius: 14px;
+  border: 2px solid rgba(255,255,255,.18);
+  background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.08));
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  padding:.95rem 1rem; color:#fff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 10px 22px rgba(0,0,0,.42);
+}
+.input-glass::placeholder{ color: rgba(230,235,245,.78); font-weight:600; letter-spacing:.01em; }
+.input-glass:focus{
+  outline:none; border-color: hsl(var(--accent) / .65);
+  box-shadow: 0 0 0 5px hsl(var(--accent) / .28), 0 14px 30px rgba(0,0,0,.55);
+}
+
+/* Links */
+a{ color: hsl(var(--accent)); }
+a:hover{ opacity:.92; }
+
+/* Cookie CTA */
+.cookie-cta{ background:hsl(var(--accent)); color:#0b0f14; border-color:hsl(var(--accent)); }
+.cookie-cta:hover{ filter:brightness(1.05); }
