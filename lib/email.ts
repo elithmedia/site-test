@@ -13,11 +13,10 @@ type MailInput = {
 const FROM = process.env.EMAIL_FROM || 'no-reply@example.com'
 
 /**
- * Trimite email prin:
- * 1) Resend (dacă RESEND_API_KEY), altfel
- * 2) SendGrid (dacă SENDGRID_API_KEY), altfel
- * 3) SMTP via Nodemailer (dacă SMTP_HOST...). Nodemailer e importat dinamic ca `any`
- *    ca să NU necesite @types/nodemailer în buildul Vercel.
+ * Ordine provideri:
+ * 1) Resend   -> RESEND_API_KEY
+ * 2) SendGrid -> SENDGRID_API_KEY
+ * 3) SMTP     -> SMTP_HOST (import dinamic nodemailer ca any)
  */
 export async function sendMail({ to, subject, html, from }: MailInput) {
   // 1) Resend
@@ -45,7 +44,6 @@ export async function sendMail({ to, subject, html, from }: MailInput) {
       to,
       subject,
       html,
-      // prevenim mod sandbox accidental
       mailSettings: { sandboxMode: { enable: false } },
     } as any)
     return {
@@ -56,7 +54,7 @@ export async function sendMail({ to, subject, html, from }: MailInput) {
     }
   }
 
-  // 3) SMTP via Nodemailer (import dinamic + tip any)
+  // 3) SMTP (import dinamic; fără types)
   if (process.env.SMTP_HOST) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const nodemailer: any = await import('nodemailer')
