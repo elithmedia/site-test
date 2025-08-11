@@ -39,17 +39,17 @@ export default function Hero() {
 }
 
 /* =========================
-   Galaxy canvas (safe TS)
+   Galaxy canvas (TS-safe)
    ========================= */
 function GalaxyCanvas() {
   const ref = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const canvas = ref.current
-    if (!canvas) return
+    const c = ref.current
+    if (!c) return
 
-    const ctx = canvas.getContext('2d', { alpha: true })
+    const ctx = c.getContext('2d', { alpha: true })
     if (!ctx) return
 
     let raf = 0
@@ -61,13 +61,12 @@ function GalaxyCanvas() {
     const stars: Star[] = []
     const rnd = (a: number, b: number) => a + Math.random() * (b - a)
 
-    function resize() {
-      // Folosim getBoundingClientRect ca să evităm TS pe clientWidth/clientHeight
-      const rect = canvas.getBoundingClientRect()
+    function resize(el: HTMLCanvasElement) {
+      const rect = el.getBoundingClientRect()
       width = Math.max(1, Math.floor(rect.width))
       height = Math.max(1, Math.floor(rect.height))
-      canvas.width = Math.floor(width * dpr)
-      canvas.height = Math.floor(height * dpr)
+      el.width = Math.floor(width * dpr)
+      el.height = Math.floor(height * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
 
@@ -77,7 +76,7 @@ function GalaxyCanvas() {
         stars.push({
           x: rnd(-width, width * 2),
           y: rnd(-height, height * 2),
-          z: rnd(0.2, 1.6),   // profunzime
+          z: rnd(0.2, 1.6),
           r: rnd(0.3, 1.6),
           tw: rnd(0, Math.PI * 2),
         })
@@ -136,8 +135,8 @@ function GalaxyCanvas() {
       raf = requestAnimationFrame(draw)
     }
 
-    const onResize = () => { resize(); init() }
-    resize(); init()
+    const onResize = () => { resize(c); init() }
+    resize(c); init()
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
     if (!reduce.matches) raf = requestAnimationFrame(draw)
