@@ -38,25 +38,34 @@ export default function Hero() {
   )
 }
 
+/* =========================
+   Galaxy canvas (safe TS)
+   ========================= */
 function GalaxyCanvas() {
-  const ref = useRef<HTMLCanvasElement | null>(null)
+  const ref = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
     const canvas = ref.current
     if (!canvas) return
+
     const ctx = canvas.getContext('2d', { alpha: true })
     if (!ctx) return
 
     let raf = 0
-    let width = 0, height = 0, dpr = Math.min(window.devicePixelRatio || 1, 2)
+    let width = 0, height = 0
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+
+    type Star = { x: number; y: number; z: number; r: number; tw: number }
     const STAR_COUNT = 240
-    const stars: { x: number; y: number; z: number; r: number; tw: number }[] = []
+    const stars: Star[] = []
     const rnd = (a: number, b: number) => a + Math.random() * (b - a)
 
     function resize() {
-      const { clientWidth, clientHeight } = canvas
-      width = clientWidth
-      height = clientHeight
+      // Folosim getBoundingClientRect ca să evităm TS pe clientWidth/clientHeight
+      const rect = canvas.getBoundingClientRect()
+      width = Math.max(1, Math.floor(rect.width))
+      height = Math.max(1, Math.floor(rect.height))
       canvas.width = Math.floor(width * dpr)
       canvas.height = Math.floor(height * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
@@ -68,7 +77,7 @@ function GalaxyCanvas() {
         stars.push({
           x: rnd(-width, width * 2),
           y: rnd(-height, height * 2),
-          z: rnd(0.2, 1.6),
+          z: rnd(0.2, 1.6),   // profunzime
           r: rnd(0.3, 1.6),
           tw: rnd(0, Math.PI * 2),
         })
@@ -78,16 +87,21 @@ function GalaxyCanvas() {
     let t = 0
     function draw() {
       t += 0.016
-      // fundal
+
+      // fundal & „space fog”
       ctx.fillStyle = 'rgba(0,0,0,0.35)'
       ctx.fillRect(0, 0, width, height)
-      const g1 = ctx.createRadialGradient(width * 0.85, height * -0.1, 0, width * 0.85, height * -0.1, Math.max(width, height))
+
+      const g1 = ctx.createRadialGradient(
+        width * 0.85, height * -0.1, 0,
+        width * 0.85, height * -0.1, Math.max(width, height)
+      )
       g1.addColorStop(0, 'rgba(50,90,180,0.20)')
       g1.addColorStop(1, 'rgba(0,0,0,0)')
       ctx.fillStyle = g1
       ctx.fillRect(0, 0, width, height)
 
-      // stele
+      // stele & twinkle
       for (let i = 0; i < stars.length; i++) {
         const s = stars[i]
         s.x -= 0.03 * s.z
@@ -102,13 +116,18 @@ function GalaxyCanvas() {
         ctx.fillStyle = `rgba(230,240,255,${alpha})`
         ctx.fill()
 
+        // glint ocazional
         if (s.r > 1.2 && Math.random() < 0.02) {
           ctx.fillStyle = `rgba(150,180,255,${alpha * 0.35})`
           ctx.fillRect(s.x - 6 * s.z, s.y, 12 * s.z, 1)
         }
       }
 
-      const g2 = ctx.createRadialGradient(width * 0.2, height * 0.2, 0, width * 0.2, height * 0.2, Math.max(width, height) * 0.8)
+      // nebula tint
+      const g2 = ctx.createRadialGradient(
+        width * 0.2, height * 0.2, 0,
+        width * 0.2, height * 0.2, Math.max(width, height) * 0.8
+      )
       g2.addColorStop(0, 'rgba(30,200,220,0.10)')
       g2.addColorStop(1, 'rgba(0,0,0,0)')
       ctx.fillStyle = g2
@@ -121,12 +140,8 @@ function GalaxyCanvas() {
     resize(); init()
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
-    if (!reduce.matches) {
-      raf = requestAnimationFrame(draw)
-    } else {
-      draw()
-      cancelAnimationFrame(raf)
-    }
+    if (!reduce.matches) raf = requestAnimationFrame(draw)
+    else { draw(); cancelAnimationFrame(raf) }
 
     window.addEventListener('resize', onResize)
     return () => {
