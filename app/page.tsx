@@ -10,6 +10,7 @@ import { LeadSchema, type LeadInput } from '@/lib/validators'
 import { submitLead } from './actions/lead'
 import { getRecaptchaToken } from '@/lib/recaptcha'
 import { useState } from 'react'
+import Hero from '@/components/Hero'
 
 const services = [
   { key:'tiktok_ig', title:'TikTok/Instagram content', bullets:['Script, filmare, editare','Hook-uri și CTA','Plan lunar'], price:'de la 400€' },
