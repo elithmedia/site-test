@@ -166,3 +166,85 @@ a:hover{ opacity:.95; }
   border-top:1px solid hsl(var(--line));
   background: hsl(var(--s1) / .98);
 }
+
+/* ===== HERO Galaxy ===== */
+.hero{
+  position: relative;
+  min-height: 86svh; /* înalt dar nu sufocă */
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero-canvas{
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  display: block;
+}
+
+.hero-overlay{
+  position: absolute; inset: 0; pointer-events: none;
+  /* întunecare subtilă pentru contrast text + tint pe accent */
+  background:
+    radial-gradient(60% 40% at 75% 0%, rgba(20,40,90,.35) 0%, rgba(0,0,0,0) 60%),
+    linear-gradient(180deg, rgba(0,0,0,.20), rgba(0,0,0,.30));
+  mix-blend-mode: normal;
+}
+
+.hero-fade{
+  position: absolute; left: 0; right: 0; bottom: 0; height: 140px; pointer-events: none;
+  /* fade to page bg (folosește hsl(var(--bg)) dacă ai definit) */
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #0c1016 65%, #0c1016 100%);
+}
+
+/* Conținut */
+.hero-inner{
+  padding-top: 2rem; padding-bottom: 2rem;
+  max-width: 52rem;
+}
+
+.hero-title{
+  font-size: clamp(2.4rem, 4vw + 1rem, 3.8rem);
+  line-height: 1.05; font-weight: 900; letter-spacing: -0.02em;
+  background: linear-gradient(90deg, #fff, #e8ecf8);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 6px 26px rgba(0,0,0,.45));
+  animation: hero-pop 700ms cubic-bezier(.2,.7,.2,1) 80ms both;
+}
+.hero-subtitle{
+  font-size: clamp(1rem, 1.2vw + .6rem, 1.2rem);
+  font-weight: 800; letter-spacing: .02em;
+  color: rgba(230,235,245,.92);
+  text-transform: uppercase;
+  margin-top: .35rem;
+  background: linear-gradient(90deg, #9cc7ff, #caaeff);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  opacity: .95;
+}
+
+.hero-copy{
+  margin-top: 1rem;
+  color: rgba(230,235,245,.86);
+  font-size: clamp(.98rem, .35vw + .9rem, 1.05rem);
+  max-width: 44rem;
+  animation: hero-fadein 600ms ease 220ms both;
+}
+
+.hero-cta{
+  display: flex; gap: .75rem; margin-top: 1.25rem;
+  animation: hero-fadein 600ms ease 320ms both;
+}
+
+/* Keyframes */
+@keyframes hero-pop {
+  0% { transform: translateY(10px) scale(.98); opacity: 0; }
+  100%{ transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes hero-fadein {
+  from { transform: translateY(6px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* Respectă setarea „reduce motion” */
+@media (prefers-reduced-motion: reduce){
+  .hero-title, .hero-copy, .hero-cta { animation: none !important; }
+}
