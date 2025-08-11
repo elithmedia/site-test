@@ -5,14 +5,10 @@ import { useEffect, useRef } from 'react'
 export default function Hero() {
   return (
     <section id="home" aria-label="Elith Media - Agenție de marketing" className="hero">
-      {/* Canvas galaxie */}
       <GalaxyCanvas />
-
-      {/* Overlay pentru contrast + fade în pagină */}
       <div className="hero-overlay" />
       <div className="hero-fade" />
 
-      {/* Conținut */}
       <div className="container relative z-10">
         <div className="hero-inner">
           <h1 className="hero-title">
@@ -33,7 +29,6 @@ export default function Hero() {
             <a href="#portfolio" className="btn">Vezi portofoliul</a>
           </div>
 
-          {/* micro SEO helpers */}
           <div className="sr-only">
             Marketing performance, paid media, content video, social media România, campanii PPC București.
           </div>
@@ -43,9 +38,6 @@ export default function Hero() {
   )
 }
 
-/* =========================================================
-   Canvas „galaxy” fără librării; performant și subtil
-   ========================================================= */
 function GalaxyCanvas() {
   const ref = useRef<HTMLCanvasElement | null>(null)
 
@@ -57,7 +49,7 @@ function GalaxyCanvas() {
 
     let raf = 0
     let width = 0, height = 0, dpr = Math.min(window.devicePixelRatio || 1, 2)
-    const STAR_COUNT = 240   // poți mări dacă vrei mai dens
+    const STAR_COUNT = 240
     const stars: { x: number; y: number; z: number; r: number; tw: number }[] = []
     const rnd = (a: number, b: number) => a + Math.random() * (b - a)
 
@@ -76,9 +68,9 @@ function GalaxyCanvas() {
         stars.push({
           x: rnd(-width, width * 2),
           y: rnd(-height, height * 2),
-          z: rnd(0.2, 1.6),  // profunzime
+          z: rnd(0.2, 1.6),
           r: rnd(0.3, 1.6),
-          tw: rnd(0, Math.PI * 2), // fază twinkle
+          tw: rnd(0, Math.PI * 2),
         })
       }
     }
@@ -86,39 +78,36 @@ function GalaxyCanvas() {
     let t = 0
     function draw() {
       t += 0.016
-      // „space fog”
-      const g1 = ctx.createRadialGradient(width * 0.8, height * -0.1, 0, width * 0.8, height * -0.1, Math.max(width, height))
-      g1.addColorStop(0, 'rgba(50,90,180,0.20)')
-      g1.addColorStop(1, 'rgba(0,0,0,0)')
+      // fundal
       ctx.fillStyle = 'rgba(0,0,0,0.35)'
       ctx.fillRect(0, 0, width, height)
+      const g1 = ctx.createRadialGradient(width * 0.85, height * -0.1, 0, width * 0.85, height * -0.1, Math.max(width, height))
+      g1.addColorStop(0, 'rgba(50,90,180,0.20)')
+      g1.addColorStop(1, 'rgba(0,0,0,0)')
       ctx.fillStyle = g1
       ctx.fillRect(0, 0, width, height)
 
       // stele
       for (let i = 0; i < stars.length; i++) {
         const s = stars[i]
-        // parallax slow drift
         s.x -= 0.03 * s.z
         if (s.x < -width * 0.2) {
           s.x = width * 1.2
           s.y = rnd(-height * 0.2, height * 1.2)
           s.z = rnd(0.2, 1.6)
         }
-        const alpha = 0.65 + 0.35 * Math.sin(t * 2 + s.tw) // twinkle
+        const alpha = 0.65 + 0.35 * Math.sin(t * 2 + s.tw)
         ctx.beginPath()
         ctx.arc(s.x, s.y, s.r * s.z, 0, Math.PI * 2)
         ctx.fillStyle = `rgba(230,240,255,${alpha})`
         ctx.fill()
 
-        // mic „glint”
         if (s.r > 1.2 && Math.random() < 0.02) {
           ctx.fillStyle = `rgba(150,180,255,${alpha * 0.35})`
           ctx.fillRect(s.x - 6 * s.z, s.y, 12 * s.z, 1)
         }
       }
 
-      // „nebula tint” subtil
       const g2 = ctx.createRadialGradient(width * 0.2, height * 0.2, 0, width * 0.2, height * 0.2, Math.max(width, height) * 0.8)
       g2.addColorStop(0, 'rgba(30,200,220,0.10)')
       g2.addColorStop(1, 'rgba(0,0,0,0)')
@@ -130,12 +119,11 @@ function GalaxyCanvas() {
 
     const onResize = () => { resize(); init() }
     resize(); init()
-    // respectă preferința utilizatorului
+
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
     if (!reduce.matches) {
       raf = requestAnimationFrame(draw)
     } else {
-      // fallback static: un singur frame
       draw()
       cancelAnimationFrame(raf)
     }
