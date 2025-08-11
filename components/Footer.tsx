@@ -5,7 +5,7 @@ export default function Footer(){
         <div className="grid md:grid-cols-3 gap-8">
           <div>
             <div className="text-lg font-semibold">Elith Media</div>
-            <p className="text-sm text-white/70 mt-2">
+            <p className="text-sm text-white/75 mt-2">
               TH NETWORK AND SOCIAL MEDIA S.R.L. • CUI 51118397
             </p>
             <p className="text-sm text-white/60 mt-1">
