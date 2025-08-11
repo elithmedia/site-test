@@ -44,7 +44,7 @@ export default function Page() {
       <CookieBanner />
 
       <main id="content">
-        {/* HERO minimal */}
+        <Hero />
         <section className="section">
           <div className="container">
             <h1 className="text-5xl md:text-7xl font-extrabold leading-tight tracking-tight text-zinc-900">
