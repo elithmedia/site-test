@@ -10,13 +10,11 @@ export default function Nav(){
     <header className="navbar">
       <div className="nav-inner">
         <a href="/" className="wordmark">Elith Media</a>
-
-        <nav className="nav-links">
+        <nav className="hidden md:flex items-center gap-6">
           {links.map(l => (
             <a key={l.href} href={l.href} className="nav-link">{l.label}</a>
           ))}
         </nav>
-
         <div className="flex items-center gap-3">
           <a href="#portfolio" className="btn btn-ghost hidden md:inline-flex">Portofoliu</a>
           <a href="#contact" className="btn btn-primary">Cere ofertă</a>
